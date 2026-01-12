@@ -1,0 +1,27 @@
+<textarea id="t" rows="6" cols="60"></textarea><br><br>
+
+<input id="imgs" type="file" accept="image/*" multiple />
+<br><br>
+
+<button onclick="send()">Analyze</button>
+
+<pre id="out"></pre>
+
+<script>
+async function send(){
+  const fd = new FormData();
+  fd.append("claim_text", document.getElementById("t").value);
+
+  const files = document.getElementById("imgs").files;
+  for (const f of files) {
+    fd.append("images", f);
+  }
+
+  const r = await fetch(
+    "https://improved-chainsaw-97w475599xpq374-8000.app.github.dev/analyze",
+    { method: "POST", body: fd }
+  );
+
+  document.getElementById("out").textContent = JSON.stringify(await r.json(), null, 2);
+}
+</script>
